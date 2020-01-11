@@ -30,30 +30,26 @@ void loop() {
 }
 
 int setText(String text, int line) {
-  lcd.setCursor(0, line);
-  lcd.print(text);
+  if (text.length() > 0) {
+    lcd.setCursor(0, line);
+    lcd.print(text);
+  }
 }
 
 String getTime() {
-  unsigned long currentTime;
-  currentTime = rtc.now();
-  uint8_t currentSecond = rtc.second(currentTime);
+  unsigned long currentTime = rtc.now();
   String timeStr;
   if (currentTime != lastTime) {
-    timeStr = "";
-    timeStr += rtc.hourString(currentTime);
-    timeStr += getSeparator(currentSecond);
-    timeStr += rtc.minuteString(currentTime);
-    timeStr += getSeparator(currentSecond);
-    timeStr += rtc.secondString(currentTime);	
+    timeStr = rtc.dayString(currentTime)
+            + "/"
+            + rtc.monthString(currentTime)
+            + "   "
+            + rtc.hourString(currentTime) 
+            + ":"
+            + rtc.minuteString(currentTime)
+            + ":"
+            + rtc.secondString(currentTime);
     lastTime = currentTime;
-    }
-  return "    " + timeStr;
-}
-
-String getSeparator(uint8_t second) {
-  if (second % 2 == 1) {
-    return ":";
   }
-  return " ";
+  return timeStr;
 }
